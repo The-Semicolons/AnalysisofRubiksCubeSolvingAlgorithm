@@ -4,6 +4,8 @@
 #include <stdio.h>
 
 int main() {
+    int a;
     printf("Kociemba's Algorithm\n");
+    scanf_s("%d", &a);
     return 0;
 }
