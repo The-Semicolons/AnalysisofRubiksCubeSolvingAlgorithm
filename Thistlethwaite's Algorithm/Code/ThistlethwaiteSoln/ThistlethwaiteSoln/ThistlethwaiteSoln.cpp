@@ -17,8 +17,7 @@ eColor getColor(char c)
         case 'G': return GREEN;
         case 'R': return RED;
         case 'O': return ORANGE;
-    }
-        
+    }     
 }
 /// <summary>
 /// This Function will take input of faces from the user
@@ -28,7 +27,7 @@ eColor getColor(char c)
 void readData(FaceArray& faces, eColor centers[])
 {
     int i, j;
-    cout << "Type Faces in order UDFBLR:" << endl;
+    cout << "Type Faces in the order UDFBLR:" << endl;
     for (int i = 0;i < 6;i++)                   //loop for all 6 faces of cube
     {
             char c[9];
