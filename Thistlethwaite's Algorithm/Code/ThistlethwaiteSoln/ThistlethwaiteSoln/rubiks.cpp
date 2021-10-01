@@ -1,6 +1,7 @@
 #include "rubiks.h"
 #include<vector>
 #include<iostream>
+using namespace std; 
 
 #define F_UP 0
 #define F_DOWN 1
@@ -171,3 +172,21 @@ void doMove(const eMove& move, FaceArray& faces) {
     }
     }
 }
+
+/// <summary>
+/// This function passes a set of moves(as calculated by the solver after each stage) which needs to be executed 
+/// by the doMove function
+/// </summary>
+/// <param name="faces">: An array of size 6 which stores the face names</param>
+/// <param name="moveList">: The list of moves</param>
+/// 
+void doMoveList(FaceArray& faces, const std::vector<eMove>& moveList) {
+    for (auto& m : moveList) { //The auto keyword specifies that the type of the variable that is being declared will be automatically deducted from its initializer
+        doMove(m, faces);
+    }
+}
+
+
+
+
+

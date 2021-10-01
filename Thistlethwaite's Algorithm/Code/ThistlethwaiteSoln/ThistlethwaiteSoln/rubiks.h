@@ -16,3 +16,4 @@ enum eMove { U = 0, U2 = 1, D = 2, D2 = 3, F = 10, F2 = 11, B = 12, B2 = 13, L =
 
 
 void doMove(const eMove& move, FaceArray& faces);
+void doMoveList(FaceArray& faces, const std::vector<eMove>& moveList);
