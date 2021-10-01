@@ -2,6 +2,51 @@
 #include<vector>
 #include<iostream>
 
+/// Function to implement Depth first search
+bool DFS(const int depth, std::vector<Move>& moveList, const std::array<Move, 6>& availableMoves, const FaceArray& faces, const Color centres[6], bool (*isStageGoal)(const FaceArray& faces, const Color centres[6]), const Move& lastMove) {
+	
+	if (depth == 0) {
+		return false;
+	}
+
+	//Recursive loop for going back to the base state
+	for (auto& m : availableMoves) {
+		//if the move is a double move and is the current move
+		if (lastMove % 2 && m == lastMove) {
+			continue;
+		}
+		//if the move is a non-affecting move
+		if (m - lastMove == 2{
+			continue;
+		}
+
+		auto facesCopy = faces;
+
+		doMove(m, facesCopy); //doMove takes move (U,U2,D,D2---) and the face as its parameters
+		//if goal stage reached, adding the move to the moveList
+		if (isStageGoal(facesCopy, centres)) {
+			moveList.insert(moveList.begin(), m);   //begin() returns iterator to the first element in the list of moves
+		    return true;
+		}
+
+		//Checking for the previous depth
+		if (DFS(depth - 1, moveList, availableMoves, facesCopy, centres, isStageGoal, m)) {
+			moveList.insert(moveList.begin(), m); //inserting the last move to the list
+			return true;
+		}
+
+	}
+	return false;
+}
+
+
+
+
+
+
+
+
+
 
 /// <summary>
 /// Stores solved state of cube and calls function responsible for applying IDDFS algorithm
