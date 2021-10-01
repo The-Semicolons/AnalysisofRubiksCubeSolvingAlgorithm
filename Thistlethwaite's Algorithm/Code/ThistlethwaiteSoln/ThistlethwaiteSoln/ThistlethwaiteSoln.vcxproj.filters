@@ -18,5 +18,13 @@
     <ClCompile Include="ThistlethwaiteSoln.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="rubiks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="rubiks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -139,7 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="rubiks.cpp" />
     <ClCompile Include="ThistlethwaiteSoln.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="rubiks.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
