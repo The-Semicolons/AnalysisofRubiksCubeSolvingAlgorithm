@@ -1,7 +1,8 @@
 #include "rubiks.h"
 #include<vector>
 #include<iostream>
-using namespace std; 
+#include<set>
+using namespace std;
 
 #define F_UP 0
 #define F_DOWN 1
@@ -10,74 +11,124 @@ using namespace std;
 #define F_LEFT 4
 #define F_RIGHT 5
 
+set<uint_fast64_t> permutations;
+
+/// <summary>
 /// Function to implement Depth first search
-bool DFS(const int depth, std::vector<eMove>& moveList, const std::array<eMove, 6>& availableMoves, const FaceArray& faces, const eColor centres[6], bool (*isStageGoal)(const FaceArray& faces, const eColor centres[6]), const eMove& lastMove) {
-	
-	if (depth == 0) {
-		return false;
-	}
+/// </summary>
+/// <param name="depth"></param>
+/// <param name="moveList"></param>
+/// <param name="availableMoves"></param>
+/// <param name="faces"></param>
+/// <param name="centres"></param>
+/// <param name="isStageGoal"></param>
+/// <param name="lastMove"></param>
+/// <returns></returns>
+bool DFS(const int depth, std::vector<eMove>& moveList, const eMove &availableMoves, const FaceArray &faces, const eColor centres[6], bool (*isStageGoal)(const FaceArray& faces, const eColor centres[6]), const eMove& lastMove) {
 
-	//Recursive loop for going back to the base state
-	for (auto& m : availableMoves) {
-		//if the move is a double move and is the current move
-		if (lastMove % 2 && m == lastMove) {
-			continue;
-		}
-		//if the move is a non-affecting move
-		if (m - lastMove == 2{
-			continue;
-		}
+    if (depth == 0) {
+        return false;
+    }
 
-		auto facesCopy = faces;
+    //Recursive loop for going back to the base state
+    for (auto& m : availableMoves) {
+        //if the move is a double move and is the current move
+        if (lastMove % 2 && m == lastMove) {
+            continue;
+        }
+        //if the move is a non-affecting move
+        if (m - lastMove == 2){
+            continue;
+        }
 
-		doMove(m, facesCopy); //doMove takes move (U,U2,D,D2---) and the face as its parameters
-		//if goal stage reached, adding the move to the moveList
-		if (isStageGoal(facesCopy, centres)) {
-			moveList.insert(moveList.begin(), m);   //begin() returns iterator to the first element in the list of moves
-		    return true;
-		}
+        auto facesCopy = faces;
 
-		//Checking for the previous depth
-		if (DFS(depth - 1, moveList, availableMoves, facesCopy, centres, isStageGoal, m)) {
-			moveList.insert(moveList.begin(), m); //inserting the last move to the list
-			return true;
-		}
+            doMove(m, facesCopy); //doMove takes move (U,U2,D,D2---) and the face as its parameters
+            //if goal stage reached, adding the move to the moveList
+            if (isStageGoal(facesCopy, centres)) {
+                moveList.insert(moveList.begin(), m);   //begin() returns iterator to the first element in the list of moves
+                    return true;
+            }
 
-	}
-	return false;
+        //Checking for the previous depth
+        if (DFS(depth - 1, moveList, availableMoves, facesCopy, centres, isStageGoal, m)) {
+            moveList.insert(moveList.begin(), m); //inserting the last move to the list
+            return true;
+        }
+
+    }
+    return false;
 }
 
-///Function to implement Iterative Deepening Depth First Search (IDDFS)
-std::vector<eMove> IDDFS(const std::array& availableMoves, const FaceArray& faces, const eColor centres[6], bool(*isStageGoal)(const FaceArray& faces, const Color centres[6])) {
-    
-    std::vector<eMove>& moveList; 
-    std::cout << std::endl << "IDDFS Depth: 1"; 
+/// <summary>
+/// Function to implement Iterative Deepening Depth First Search (IDDFS)
+/// </summary>
+/// <param name="availableMoves"></param>
+/// <param name="faces"></param>
+/// <param name="centres"></param>
+/// <param name="isStageGoal"></param>
+/// <returns></returns>
+vector<eMove> IDDFS(const eMove availableMoves, const FaceArray& faces, const eColor centres[6], bool(*isStageGoal)(const FaceArray& faces, const eColor centres[6])) {
+
+    vector<eMove> moveList;
+    cout <<endl << "IDDFS Depth: 1";
     int depth = 1;
     while (!DFS(depth, moveList, availableMoves, faces, centres, isStageGoal, NONE)) { //If DFS function returns false, then IDDFS is used
         depth++;
-        std::cout << ". " << depth;
+       cout << ". " << depth;
     }
-    std::cout << ". Complete" << std::endl;
+    cout << ". Complete" << std::endl;
 
     return moveList;
 }
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="faces"></param>
+/// <param name="faceIndex"></param>
+/// <param name="cubieIndex"></param>
+/// <returns></returns>
+eColor getSquareColor(const FaceArray& faces, int faceIndex, int cubieIndex)
+{
+    int shiftBits = 4 * (7 - cubieIndex);
+    int cubieColor = ((faces[faceIndex] >> shiftBits) & 0xF);
 
+}
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="faces"></param>
+/// <returns></returns>
+uint_fast64_t makePermutation(const FaceArray &faces)
+{
+    uint_fast64_t perm = 0;
+    for (auto& f : { F_LEFT, F_FRONT, F_RIGHT, F_BACK })
+    {
+        for (int i = 0;i <= 6;i += 2)
+        {
+            perm = (perm << 4) | getSquareColor(faces, f, i);
+        }
+    }
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+/// <summary>
+/// 
+/// </summary>
+/// <param name="faces"></param>
+/// <returns></returns>
+bool isInitialiseStageGoal(const FaceArray &faces, const eColor centres[6])
+{
+    auto perm = makePermutation(faces);
+    if (permutations.count(perm) == 0)
+    {
+        permutations.insert(perm);
+        if (permutations.size() == 96)
+            return true;
+    }
+    return false;
+}
 
 /// <summary>
 /// Stores solved state of cube and calls function responsible for applying IDDFS algorithm
@@ -85,19 +136,19 @@ std::vector<eMove> IDDFS(const std::array& availableMoves, const FaceArray& face
 /// <param name="centers">: Contains color of center face of cube</param>
 void initialiseSolver(const eColor centers[6])
 {
-	FaceArray solvedState;
-	for (int i = 0;i < 6;i++)				//Loop for traversing all the 6 faces of cube
-	{
-		uint_fast32_t face = 0;
-		for (int j = 0;j < 8;j++)			//Nested loop for traversing 8 colors of face of cube
-		{
-			face = (face << 4) | centers[i];  //Storing color of center face in the 8 faces 
-		}
-		solvedState[i] = face;
-	}
-	eMove availableMoves[6] = { L2, R2, F2, B2, U2, D2 };
-	doIDDFS(availableMoves, solvedState, centers, isInitialiseStageGoal);
-	//Make doIDDFS function and isInitialiseStageGoal to continue the code
+    FaceArray solvedState;
+    for (int i = 0;i < 6;i++)				//Loop for traversing all the 6 faces of cube
+    {
+        uint_fast32_t face = 0;
+        for (int j = 0;j < 8;j++)			//Nested loop for traversing 8 colors of face of cube
+        {
+            face = (face << 4) | centers[i];  //Storing color of center face in the 8 faces 
+        }
+        solvedState[i] = face;
+    }
+    eMove availableMoves[6] = { L2, R2, F2, B2, U2, D2 };
+    IDDFS(&availableMoves, solvedState, centers, isInitialiseStageGoal);
+    //Make doIDDFS function and isInitialiseStageGoal to continue the code
 }
 
 
@@ -205,7 +256,6 @@ void doMove(const eMove& move, FaceArray& faces) {
 /// </summary>
 /// <param name="faces">: An array of size 6 which stores the face names</param>
 /// <param name="moveList">: The list of moves</param>
-/// 
 void doMoveList(FaceArray& faces, const std::vector<eMove>& moveList) {
     for (auto& m : moveList) { //The auto keyword specifies that the type of the variable that is being declared will be automatically deducted from its initializer
         doMove(m, faces);
