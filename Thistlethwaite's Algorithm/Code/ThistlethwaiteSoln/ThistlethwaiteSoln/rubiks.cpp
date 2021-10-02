@@ -48,9 +48,9 @@ bool DFS(const int depth, std::vector<eMove>& moveList, const std::array<eMove, 
 }
 
 ///Function to implement Iterative Deepening Depth First Search (IDDFS)
-std::vector<Move> IDDFS(const std::array& availableMoves, const FaceArray& faces, const Color centres[6], bool(*isStageGoal)(const FaceArray& faces, const Color centres[6])) {
+std::vector<eMove> IDDFS(const std::array& availableMoves, const FaceArray& faces, const eColor centres[6], bool(*isStageGoal)(const FaceArray& faces, const Color centres[6])) {
     
-    std::vector<Move>& moveList; 
+    std::vector<eMove>& moveList; 
     std::cout << std::endl << "IDDFS Depth: 1"; 
     int depth = 1;
     while (!DFS(depth, moveList, availableMoves, faces, centres, isStageGoal, NONE)) { //If DFS function returns false, then IDDFS is used
