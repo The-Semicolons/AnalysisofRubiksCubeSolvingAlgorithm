@@ -97,6 +97,97 @@ eColor getSquareColor(const FaceArray& faces, int faceIndex, int cubieIndex)
 }
 
 /// <summary>
+/// returns the face index for a particular color
+/// </summary>
+/// <param name="centres"></param>
+/// <param name="faceColor"></param>
+int getFace(const eColor centres[6], eColor faceColor) {
+    for (int i = 0; i < 6; ++i) {
+        if (faceColor == centres[i])
+            return i;
+    }
+    return -1;
+}
+
+/// <summary>
+/// returns the index of an edge cubie of given face and color
+/// </summary>
+/// <param name="centres"></param>
+/// <param name="cubieFaceIndex"></param>
+/// <param name="edgeColor"></param>
+int getEdgeCubieIndex(const eColor centres[6], int cubieFaceIndex, const eColor& edgeColor) {
+    switch (cubieFaceIndex) {
+    case F_FRONT: {
+        if (edgeColor == centres[F_UP])
+            return 1;
+        if (edgeColor == centres[F_RIGHT])
+            return 3;
+        if (edgeColor == centres[F_DOWN])
+            return 5;
+        if (edgeColor == centres[F_LEFT])
+            return 7;
+        break;
+    }
+    case F_BACK: {
+        if (edgeColor == centres[F_UP])
+            return 1;
+        if (edgeColor == centres[F_RIGHT])
+            return 7;
+        if (edgeColor == centres[F_DOWN])
+            return 5;
+        if (edgeColor == centres[F_LEFT])
+            return 3;
+        break;
+    }
+    case F_UP: {
+        if (edgeColor == centres[F_FRONT])
+            return 5;
+        if (edgeColor == centres[F_RIGHT])
+            return 3;
+        if (edgeColor == centres[F_BACK])
+            return 1;
+        if (edgeColor == centres[F_LEFT])
+            return 7;
+        break;
+    }
+    case F_DOWN: {
+        if (edgeColor == centres[F_FRONT])
+            return 1;
+        if (edgeColor == centres[F_RIGHT])
+            return 3;
+        if (edgeColor == centres[F_BACK])
+            return 5;
+        if (edgeColor == centres[F_LEFT])
+            return 7;
+        break;
+    }
+    case F_LEFT: {
+        if (edgeColor == centres[F_UP])
+            return 1;
+        if (edgeColor == centres[F_BACK])
+            return 7;
+        if (edgeColor == centres[F_DOWN])
+            return 5;
+        if (edgeColor == centres[F_FRONT])
+            return 3;
+        break;
+    }
+    case F_RIGHT: {
+        if (edgeColor == centres[F_UP])
+            return 1;
+        if (edgeColor == centres[F_BACK])
+            return 3;
+        if (edgeColor == centres[F_DOWN])
+            return 5;
+        if (edgeColor == centres[F_FRONT])
+            return 7;
+        break;
+    }
+    }
+    return -1;
+}
+
+/// <summary>
 /// 
 /// </summary>
 /// <param name="faces"></param>
@@ -129,6 +220,8 @@ bool isInitialiseStageGoal(const FaceArray &faces, const eColor centres[6])
     }
     return false;
 }
+
+
 
 /// <summary>
 /// Stores solved state of cube and calls function responsible for applying IDDFS algorithm
