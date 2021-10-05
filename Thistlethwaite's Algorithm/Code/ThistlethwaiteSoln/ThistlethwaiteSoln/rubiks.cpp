@@ -16,13 +16,13 @@ set<uint_fast64_t> permutations;
 /// <summary>
 /// Function to implement Depth first search
 /// </summary>
-/// <param name="depth"></param>
-/// <param name="moveList"></param>
-/// <param name="availableMoves"></param>
-/// <param name="faces"></param>
-/// <param name="centres"></param>
-/// <param name="isStageGoal"></param>
-/// <param name="lastMove"></param>
+/// <param name="depth"> Specifies the search depth </param>
+/// <param name="moveList"> Specifies all the moves that can be made </param>
+/// <param name="availableMoves"> Specifies the available moves that can be made</param>
+/// <param name="faces"> Array of type FaceArray for storing scrambled faces</param>
+/// <param name="centres"> Array for storing centre colours of a face </param>
+/// <param name="isStageGoal"> Returns boolean value if the stage is goal stage </param>
+/// <param name="lastMove"> Specifies the last move made </param>
 /// <returns></returns>
 bool DFS(const int depth, std::vector<eMove>& moveList, const eMove &availableMoves, const FaceArray &faces, const eColor centres[6], bool (*isStageGoal)(const FaceArray& faces, const eColor centres[6]), const eMove& lastMove) {
 
@@ -63,10 +63,10 @@ bool DFS(const int depth, std::vector<eMove>& moveList, const eMove &availableMo
 /// <summary>
 /// Function to implement Iterative Deepening Depth First Search (IDDFS)
 /// </summary>
-/// <param name="availableMoves"></param>
-/// <param name="faces"></param>
-/// <param name="centres"></param>
-/// <param name="isStageGoal"></param>
+/// <param name="availableMoves"> Specifies the available moves that can be made </param>
+/// <param name="faces"> Array of type FaceArray for storing scrambled faces </param>
+/// <param name="centres"> Array for storing centre colours of a face </param>
+/// <param name="isStageGoal"> Returns boolean value if the stage is goal stage </param>
 /// <returns></returns>
 vector<eMove> IDDFS(const eMove availableMoves, const FaceArray& faces, const eColor centres[6], bool(*isStageGoal)(const FaceArray& faces, const eColor centres[6])) {
 

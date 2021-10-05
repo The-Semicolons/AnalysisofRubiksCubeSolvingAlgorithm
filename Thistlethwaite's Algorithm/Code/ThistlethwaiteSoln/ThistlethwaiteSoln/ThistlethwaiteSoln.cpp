@@ -58,7 +58,7 @@ void readData(FaceArray& faces, eColor centers[])
 int main()
 {
     FaceArray faces = { 0,0,0,0,0,0 };          //Initializing array for storing scrambled faces
-    eColor centers[6];                          //Initializing array foe storing Colours at middle cubie of the face
+    eColor centers[6];                          //Initializing array for storing Colours at middle cubie of the face
 
     readData(faces, centers);                   //Function that will take input of faces from the user
 
