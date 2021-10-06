@@ -359,3 +359,62 @@ void doMoveList(FaceArray& faces, const std::vector<eMove>& moveList) {
 
 
 
+/// <summary>
+/// Function to get moves of Stage 1
+/// </summary>
+/// <param name="faces"> Array of type FaceArray for storing scrambled faces</param>
+/// <param name="centres"> Array for storing centre colours of a face </param>
+/// <returns></returns>
+
+std::vector<eMove> getStage1Moves(const FaceArray& faces, const eColor centres[6]) {
+
+    if (isAllEdgesGood(faces, centres)) {
+        return std::vector<eMove>();
+    }
+
+    std::array<eMove, 6> availableMoves{ L, R, F, B, U, D }; //Available moves in Stage 1
+    return IDDFS(availableMoves, faces, centres, isAllEdgesGood); //Applying IDDFS on this stage
+
+}
+
+/// <summary>
+/// Boolean function to check for Stage 2
+/// </summary>
+/// <param name="faces"> Array of type FaceArray for storing scrambled faces</param>
+/// <param name="centres"> Array for storing centre colours of a face </param>
+/// <returns></returns>
+
+//Accomplishing the correct corner orientation in this stage
+bool isStage2Goal(const FaceArray& faces, const eColor centres[6]) {
+    const eColor& color_left = centres[F_LEFT], & color_right = centres[F_RIGHT];
+
+    //Comparing centres of the left and right faces with the corners
+    for (int i = 0; i <= 6; i += 2) {
+        eColor c1 = getSquareColor(faces, F_LEFT, i), c2 = getSquareColor(faces, F_RIGHT, i);
+        if (!((c1 == color_left || c1 == color_right) && (c2 == color_left || c2 == color_right))) {
+            return false;
+        }
+    }
+
+    //Checking the edges - FU, FD, BU, BD
+    const eColor& color_front = centres[F_FRONT], & color_back = centres[F_BACK], & color_up = centres[F_UP], & color_down = centres[F_DOWN];
+    for (auto& i : { 1, 5 }) {
+
+        eColor c1 = getSquareColor(faces, F_FRONT, i), c2 = getSquareColor(faces, F_BACK, i);
+        if (!((c1 == color_front || c1 == color_back) && (c2 == color_front || c2 == color_back))) {
+            return false;
+        }
+
+        eColor c1 = getSquareColor(faces, F_UP, i), c2 = getSquareColor(faces, F_DOWN, i);
+        if (!((c1 == color_up || c1 == color_down) && (c2 == color_up || c2 == color_down))) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
+
+
+
