@@ -372,7 +372,8 @@ std::vector<eMove> getStage1Moves(const FaceArray& faces, const eColor centres[6
         return std::vector<eMove>();
     }
 
-    std::array<eMove, 6> availableMoves{ L, R, F, B, U, D }; //Available moves in Stage 1
+    //Vanshaj
+    //std::array<eMove, 6> availableMoves{ L, R, F, B, U, D }; //Available moves in Stage 1
     return IDDFS(availableMoves, faces, centres, isAllEdgesGood); //Applying IDDFS on this stage
 
 }
@@ -412,6 +413,24 @@ bool isStage2Goal(const FaceArray& faces, const eColor centres[6]) {
     }
 
     return true;
+}
+
+
+/// <summary>
+/// Function to get moves of Stage 2
+/// </summary>
+/// <param name="faces"> Array of type FaceArray for storing scrambled faces</param>
+/// <param name="centres"> Array for storing centre colours of a face </param>
+/// <returns></returns>
+std::vector<eMove> getStage2Moves(const FaceArray& faces, const eColor centres[6]) {
+
+    if (isStage2Goal(faces, centres)) {
+        return std::vector<eMove>();
+    }
+
+    //Vanshaj
+    // std::array<eMove, 6> availableMoves{ L, R, F, B, U2, D2 };
+    return IDDFS(availableMoves, faces, centres, isStage2Goal);
 }
 
 
