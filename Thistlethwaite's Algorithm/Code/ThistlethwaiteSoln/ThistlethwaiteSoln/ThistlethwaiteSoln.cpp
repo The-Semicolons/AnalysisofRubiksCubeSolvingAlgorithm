@@ -64,6 +64,56 @@ string getMoveString(const eMove &m)
     return "";
 }
 
+
+
+/// <summary>
+/// To optimise the solution of solving a Rubik's cube by removing the unnecessary/extra moves
+/// </summary>
+/// <param moveString">: A string consisting of all the stages to solve a cube</param>
+/// <returns>String of optimised moves</returns>
+
+std::string optimiseMoves(std::string &moveString) {
+    int start = 0; 
+    std::string prevMove, optimizedString;
+
+    for (int i = 0; i < moveString.size(); i++) {
+        if (moveString[i] == ' ') {
+            auto Currentmove = moveString.substr(start, i - start); //creating substrings of all the moves
+
+            if (prevMove[0] == Currentmove[0]) { //Checking for the 0th index of the 2 moves for the face (L, R, F, B, U or D)
+                prevMove.clear();
+
+                if (Currentmove[1] == '2' || prevMove[1] == '2') { //For cases like L L2 (L L2 = L')
+                    optimizedString.push_back(Currentmove[0]);
+                    optimizedString = optimizedString + "\' ";
+                }
+                else {
+                    prevMove.push_back(Currentmove[0]); //For cases like L L (L L = L2)
+                    prevMove = prevMove + "2 ";
+                }
+            }
+            else {
+                optimizedString = optimizedString + prevMove;
+                prevMove = Currentmove + ' ';
+            }
+            start = i + 1;
+        }   
+    }
+    return optimizedString + prevMove;
+}   
+
+
+
+
+
+
+
+
+
+
+
+
+
 /// <summary>
 /// Converts vector list of moves into string
 /// </summary>
