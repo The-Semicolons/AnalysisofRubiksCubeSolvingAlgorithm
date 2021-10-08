@@ -27,14 +27,14 @@ eColor getColor(char c)
 /// <returns>Character of color</returns>
 char getColorCharacter(int c)
 {
-    switch (c) 
+    switch (c)
     {
-        case WHITE: return 'W';
-        case YELLOW: return 'Y';
-        case BLUE: return 'B';
-        case GREEN: return 'G';
-        case RED: return 'R';
-        case ORANGE: return 'O';
+    case WHITE: return 'W';
+    case YELLOW: return 'Y';
+    case BLUE: return 'B';
+    case GREEN: return 'G';
+    case RED: return 'R';
+    case ORANGE: return 'O';
     }
     exit(0);
 }
@@ -44,22 +44,22 @@ char getColorCharacter(int c)
 /// </summary>
 /// <param name="m">: An element of vector moveList</param>
 /// <returns>String of face moves</returns>
-string getMoveString(const eMove &m)
+string getMoveString(const eMove& m)
 {
     switch (m)
     {
-        case U: return "U";
-        case D: return "D";
-        case F: return "F";
-        case B: return "B";
-        case L: return "L";
-        case R: return "R";
-        case U2: return "U2";
-        case D2: return "D2";
-        case F2: return "F2";
-        case B2: return "B2";
-        case L2: return "L2";
-        case R2: return "R2";
+    case U: return "U";
+    case D: return "D";
+    case F: return "F";
+    case B: return "B";
+    case L: return "L";
+    case R: return "R";
+    case U2: return "U2";
+    case D2: return "D2";
+    case F2: return "F2";
+    case B2: return "B2";
+    case L2: return "L2";
+    case R2: return "R2";
     }
     return "";
 }
@@ -72,8 +72,8 @@ string getMoveString(const eMove &m)
 /// <param moveString">: A string consisting of all the stages to solve a cube</param>
 /// <returns>String of optimised moves</returns>
 
-std::string optimiseMoves(std::string &moveString) {
-    int start = 0; 
+std::string optimiseMoves(std::string& moveString) {
+    int start = 0;
     std::string prevMove, optimizedString;
 
     for (int i = 0; i < moveString.size(); i++) {
@@ -97,10 +97,10 @@ std::string optimiseMoves(std::string &moveString) {
                 prevMove = Currentmove + ' ';
             }
             start = i + 1;
-        }   
+        }
     }
     return optimizedString + prevMove;
-}   
+}
 
 
 
@@ -124,7 +124,7 @@ string getMoveListString(const vector<eMove>& moveList)
     string moveSequenceString;
     for (auto& m : moveList)                               //Traversing all the elements of vector moveList
     {
-        moveSequenceString += getMoveString(m) + ' ';     
+        moveSequenceString += getMoveString(m) + ' ';
     }
     return moveSequenceString;
 }
@@ -220,15 +220,31 @@ int main()
     auto stageString = getMoveListString(moves);   //Converting the moves returned by IDDFS to string 
     cout << "Stage 1 Moves: " << stageString;      //Printing the moves
     doMoveList(faces, moves);                      //Applying the moves on rubik's cube
-    moveString += stageString;                     
+    moveString += stageString;
 
     printCube(faces, centers);                      //Printing the cube
 
-    moves = getStage2Moves(faces, centers);         //Applying IDDFS Algorithm on stage 1 moves
+    moves = getStage2Moves(faces, centers);         //Applying IDDFS Algorithm on stage 2 moves
     stageString = getMoveListString(moves);         //Converting the moves returned by IDDFS to string 
     cout << "Stage 2 Moves: " << stageString;       //Printing the moves
     doMoveList(faces, moves);                       //Applying the moves on rubik's cube
     moveString += stageString;
 
     printCube(faces, centers);                       //Printing the cube
+
+    moves = getStage3Moves(faces, centers);         //Applying IDDFS Algorithm on stage 3 moves
+    stageString = getMoveListString(moves);         //Converting the moves returned by IDDFS to string 
+    cout << "Stage 3 Moves: " << stageString;       //Printing the moves
+    doMoveList(faces, moves);                       //Applying the moves on rubik's cube
+    moveString += stageString;
+
+    printCube(faces, centers);                       //Printing the cube
+
+    moves = getStage4Moves(faces, centers);         //Applying IDDFS Algorithm on stage 4 moves
+    stageString = getMoveListString(moves);         //Converting the moves returned by IDDFS to string 
+    cout << "Stage 4 Moves: " << stageString;       //Printing the moves
+    doMoveList(faces, moves);                       //Applying the moves on rubik's cube
+    moveString += stageString;
+
+    
 }

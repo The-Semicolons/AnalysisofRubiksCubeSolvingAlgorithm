@@ -22,3 +22,13 @@ void initialiseSolver(const eColor centres[6]);
 
 std::vector<eMove> getStage1Moves(const FaceArray& faces, const eColor centres[6]);
 std::vector<eMove> getStage2Moves(const FaceArray& faces, const eColor centres[6]);
+std::vector<eMove> getStage3Moves(const FaceArray& faces, const eColor centres[6]);
+std::vector<eMove> getStage4Moves(const FaceArray& faces, const eColor centres[6]);
+
+bool isAllEdgesGood(const FaceArray& faces, const eColor centres[6]);
+bool isStage2Goal(const FaceArray& faces, const eColor centres[6]);
+bool isStage3Goal(const FaceArray& faces, const eColor centres[6]);
+
+bool isStage2Goal(const FaceArray& faces, const eColor centres[6]);
+bool isStage3Goal(const FaceArray& faces, const eColor centres[6]);
+bool isSolved(const FaceArray& faces, const eColor centres[6]);
