@@ -2,6 +2,7 @@
 #include<vector>
 #include<iostream>
 #include<set>
+#include<array>
 using namespace std;
 
 #define F_UP 0
@@ -23,15 +24,17 @@ set<uint_fast64_t> permutations;
 /// <param name="centres"> Array for storing centre colours of a face </param>
 /// <param name="isStageGoal"> Returns boolean value if the stage is goal stage </param>
 /// <param name="lastMove"> Specifies the last move made </param>
-/// <returns></returns>
-bool DFS(const int depth, std::vector<eMove>& moveList, const eMove& availableMoves, const FaceArray& faces, const eColor centres[6], bool (*isStageGoal)(const FaceArray& faces, const eColor centres[6]), const eMove& lastMove) {
+/// <returns>Bollean value True if goal state is found else False</returns>
+bool DFS(const int depth, std::vector<eMove> &moveList, const array<eMove,6> &availableMoves, const FaceArray& faces, const eColor centres[6],
+    bool (*isStageGoal)(const FaceArray& faces, const eColor centres[6]), const eMove& lastMove) 
+{
 
     if (depth == 0) {
         return false;
     }
 
     //Recursive loop for going back to the base state
-    for (auto& m : availableMoves) {
+    for (auto &m : availableMoves) {
         //if the move is a double move and is the current move
         if (lastMove % 2 && m == lastMove) {
             continue;
@@ -67,8 +70,8 @@ bool DFS(const int depth, std::vector<eMove>& moveList, const eMove& availableMo
 /// <param name="faces"> Array of type FaceArray for storing scrambled faces </param>
 /// <param name="centres"> Array for storing centre colours of a face </param>
 /// <param name="isStageGoal"> Returns boolean value if the stage is goal stage </param>
-/// <returns></returns>
-vector<eMove> IDDFS(const eMove availableMoves, const FaceArray& faces, const eColor centres[6], bool(*isStageGoal)(const FaceArray& faces, const eColor centres[6])) {
+/// <returns>Vector of moves found by algorithm to solve the cube</returns>
+vector<eMove> IDDFS(const array<eMove,6> &availableMoves, const FaceArray& faces, const eColor centres[6], bool(*isStageGoal)(const FaceArray& faces, const eColor centres[6])) {
 
     vector<eMove> moveList;
     cout << endl << "IDDFS Depth: 1";
@@ -83,17 +86,17 @@ vector<eMove> IDDFS(const eMove availableMoves, const FaceArray& faces, const eC
 }
 
 /// <summary>
-/// 
+/// Finds the cubie color of the cubir passed
 /// </summary>
 /// <param name="faces"></param>
 /// <param name="faceIndex"></param>
 /// <param name="cubieIndex"></param>
-/// <returns></returns>
+/// <returns>Returns enum of type eColor</returns>
 eColor getSquareColor(const FaceArray& faces, int faceIndex, int cubieIndex)
 {
     int shiftBits = 4 * (7 - cubieIndex);
     int cubieColor = ((faces[faceIndex] >> shiftBits) & 0xF);
-
+    return static_cast<eColor>(cubieColor);
 }
 
 /// <summary>
@@ -202,13 +205,14 @@ uint_fast64_t makePermutation(const FaceArray& faces)
             perm = (perm << 4) | getSquareColor(faces, f, i);
         }
     }
+    return perm;
 }
 
 /// <summary>
-/// 
+/// Checks if input cube given by user is solved or scrambled
 /// </summary>
 /// <param name="faces"></param>
-/// <returns></returns>
+/// <returns>Returns bollean value True or False</returns>
 bool isInitialiseStageGoal(const FaceArray& faces, const eColor centres[6])
 {
     auto perm = makePermutation(faces);
@@ -239,8 +243,8 @@ void initialiseSolver(const eColor centers[6])
         }
         solvedState[i] = face;
     }
-    eMove availableMoves[6] = { L2, R2, F2, B2, U2, D2 };
-    IDDFS(&availableMoves, solvedState, centers, isInitialiseStageGoal);
+    array<eMove,6> availableMoves = { L2, R2, F2, B2, U2, D2 };
+    IDDFS(availableMoves, solvedState, centers, isInitialiseStageGoal);
 }
 
 
@@ -363,29 +367,27 @@ void doMoveList(FaceArray& faces, const std::vector<eMove>& moveList) {
 /// </summary>
 /// <param name="faces">: Array of type FaceArray for storing scrambled faces</param>
 /// <param name="centres">: Array for storing centre colours of a face </param>
-/// <returns></returns>
-
+/// <returns>Moves found by the algorithm to solve the cube</returns>
 std::vector<eMove> getStage1Moves(const FaceArray& faces, const eColor centres[6]) {
 
     if (isAllEdgesGood(faces, centres)) {
         return std::vector<eMove>();
     }
 
-    //Vanshaj
-    //std::array<eMove, 6> availableMoves{ L, R, F, B, U, D }; //Available moves in Stage 1
-    return IDDFS(availableMoves, faces, centres, isAllEdgesGood); //Applying IDDFS on this stage
+    
+    array<eMove, 6> availableMoves{ L, R, F, B, U, D };             //Available moves in Stage 1
+    return IDDFS(availableMoves, faces, centres, isAllEdgesGood);   //Applying IDDFS on this stage
 
 }
 
 /// <summary>
-/// Boolean function to check for Stage 2
+/// Function to check for Stage 2
 /// </summary>
 /// <param name="faces">: Array of type FaceArray for storing scrambled faces</param>
 /// <param name="centres">: Array for storing centre colours of a face </param>
-/// <returns></returns>
-
-//Accomplishing the correct corner orientation in this stage
+/// <returns>True if cube satisfies the conditions of stage 2 else false</returns>
 bool isStage2Goal(const FaceArray& faces, const eColor centres[6]) {
+    //Accomplishing the correct corner orientation in this stage
     const eColor& color_left = centres[F_LEFT], & color_right = centres[F_RIGHT];
 
     //Comparing centres of the left and right faces with the corners
@@ -405,7 +407,7 @@ bool isStage2Goal(const FaceArray& faces, const eColor centres[6]) {
             return false;
         }
 
-        eColor c1 = getSquareColor(faces, F_UP, i), c2 = getSquareColor(faces, F_DOWN, i);
+         c1 = getSquareColor(faces, F_UP, i), c2 = getSquareColor(faces, F_DOWN, i);
         if (!((c1 == color_up || c1 == color_down) && (c2 == color_up || c2 == color_down))) {
             return false;
         }
@@ -420,25 +422,25 @@ bool isStage2Goal(const FaceArray& faces, const eColor centres[6]) {
 /// </summary>
 /// <param name="faces">: Array of type FaceArray for storing scrambled faces</param>
 /// <param name="centres">: Array for storing centre colours of a face </param>
-/// <returns></returns>
+/// <returns>Moves found by the algorithm to solve the cube in stage 2</returns>
 std::vector<eMove> getStage2Moves(const FaceArray& faces, const eColor centres[6]) {
 
     if (isStage2Goal(faces, centres)) {
         return std::vector<eMove>();
     }
 
-    //Vanshaj
-    // std::array<eMove, 6> availableMoves{ L, R, F, B, U2, D2 };
-    return IDDFS(availableMoves, faces, centres, isStage2Goal);
+  
+    array<eMove, 6> availableMoves{ L, R, F, B, U2, D2 };           //Available moves in Stage 2
+    return IDDFS(availableMoves, faces, centres, isStage2Goal);     //Applying IDDFS on this stage
 }
 
 /// <summary>
-/// 
+/// Function to check for Stage 3
 /// </summary>
 /// <param name="faces"></param>
 /// <param name="centres"></param>
-/// <returns></returns>
-bool isStage3Goal(const FaceArray &faces, const eColor centres[6])
+/// <returns>True if cube satisfies the conditions of stage3 goal else false</returns>
+bool isStage3Goal(const FaceArray& faces, const eColor centres[6])
 {
     const eColor& color_u = centres[F_UP];
     const eColor& color_d = centres[F_DOWN];
@@ -461,32 +463,32 @@ bool isStage3Goal(const FaceArray &faces, const eColor centres[6])
 }
 
 /// <summary>
-/// 
+/// Function to get moves of Stage 3
 /// </summary>
 /// <param name="faces"></param>
 /// <param name="centres"></param>
-/// <returns></returns>
+/// <returns>Moves found by the algorithm to solve the cube in stage 3</returns>
 vector<eMove> getStage3Moves(const FaceArray& faces, const eColor centres[6])
 {
     if (isStage3Goal(faces, centres))
         return vector<eMove>();
-    array<eMove,6> availableMoves{ L, R, F2, B2, U2, D2 };
-    return IDDFS(availableMoves, faces, centres, isStage3Goal);
+    array<eMove, 6> availableMoves{ L, R, F2, B2, U2, D2 };                 //Available moves in Stage 3
+    return IDDFS(availableMoves, faces, centres, isStage3Goal);             //Applying IDDFS on this stage
 }
 
 /// <summary>
-/// 
+/// Checks if cube has reached goal state or not
 /// </summary>
 /// <param name="faces"></param>
 /// <param name="centres"></param>
-/// <returns></returns>
+/// <returns>True if cube is in solved state else false</returns>
 bool isSolved(const FaceArray& faces, const eColor centres[6])
 {
     for (int f = 0;f < 6;++f)
     {
         for (int i = 0;i < 8;++i)
         {
-            if (getSquareColor(faces, f, i) != centers[f])
+            if (getSquareColor(faces, f, i) != centres[f])
                 return false;
         }
     }
@@ -494,17 +496,17 @@ bool isSolved(const FaceArray& faces, const eColor centres[6])
 }
 
 /// <summary>
-/// 
+/// Function to get moves of Stage 4
 /// </summary>
 /// <param name="faces"></param>
 /// <param name="centres"></param>
-/// <returns></returns>
+/// <returns>Moves found by the algorithm to solve the cube in stage 4</returns>
 vector<eMove> getStage4Moves(const FaceArray& faces, const eColor centres[6])
 {
     if (isSolved(faces, centres))
         return vector<eMove>();
-    array<eMove,6> availableMoves{ L2, R2, F2, B2, U2, D2 };
-    return IDDFS(availableMoves, faces, centres, isSolved);
+    array<eMove, 6> availableMoves{ L2, R2, F2, B2, U2, D2 };           //Available moves in Stage 4
+    return IDDFS(availableMoves, faces, centres, isSolved);             //Applying IDDFS on this stage
 }
 
 

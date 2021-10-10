@@ -1,6 +1,9 @@
 /// ThistlethwaiteSoln.cpp : This file contains the 'main' function. Program execution begins and ends there.
 #include "rubiks.h"
 #include <iostream>
+#include<string>
+#include<vector>
+#include<array>
 using namespace std;
 /// <summary>
 /// Takes input of face color and returns enum value of that face
@@ -101,17 +104,6 @@ std::string optimiseMoves(std::string& moveString) {
     }
     return optimizedString + prevMove;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 /// <summary>
@@ -246,5 +238,5 @@ int main()
     doMoveList(faces, moves);                       //Applying the moves on rubik's cube
     moveString += stageString;
 
-    
+
 }
