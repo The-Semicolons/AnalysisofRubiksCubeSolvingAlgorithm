@@ -358,9 +358,66 @@ void doMoveList(FaceArray& faces, const std::vector<eMove>& moveList) {
     }
 }
 
+/// <summary>
+/// This function checks whether an edge pice is good or not.
+/// An edge piece is "GOOD if it can be moved to its solved position without using quarter turns of the up or down faces.
+/// if an 'A' edge actually belongs in a 'B' position, then a quarter up/down turn is needed and hence the edge is bad and vice versa
+/// if 'A' edge belongs to 'A' position then edge is good
+/// </summary>
+/// <param name="fromFace"></param>
+/// <param name="fromCubieIndex"></param>
+/// <param name="toFace"></param>
+/// <param name="toCubieInd"></param>
+bool isGoodEdge(int fromFace, int fromCubieInd, int toFace, int toCubieInd) {
+    static bool A_edges[6][8] = {
+        {0, 1, 0, 0, 0, 1, 0, 0}, {0, 1, 0, 0, 0, 1, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 1, 0, 1, 0, 1, 0, 1}, {0, 1, 0, 1, 0, 1, 0, 1}
+    };
+    return A_edges[fromFace][fromCubieInd] == A_edges[toFace][toCubieInd];
+}
 
+/// <summary>
+/// This function checks whether all edges are good or not.
+/// There are 12 edges in the cube
+/// F edges -> 4      [(1, 5), (3, 7), (5, 1), (7, 3)]
+/// B edges -> 4      [(1, 1), (3, 7), (5, 5), (7, 3)]
+/// edges in between -> 4     [(1, 7), (3, 1), (5, 3), (7, 5)]
+/// </summary>
+/// <param name="faces"></param>
+/// <param name="centres"></param>
+bool isAllEdgesGood(const FaceArray& faces, const eColor centres[6]) {
 
+    int i = 1, j = i, f = F_LEFT;
+    int toFace, toCubieInd;
 
+    for (auto face : { F_UP, F_RIGHT, F_DOWN, F_LEFT }) {
+
+        //F edges
+        toFace = getFace(centres, getSquareColor(faces, F_FRONT, i));
+        toCubieInd = getEdgeCubieIndex(centres, toFace, getSquareColor(faces, face, (i + 4) % 8));
+        if (!isGoodEdge(F_FRONT, i, toFace, toCubieInd))
+            return false;
+
+        //B edges
+        toFace = getFace(centres, getSquareColor(faces, F_BACK, i));
+        toCubieInd = getEdgeCubieIndex(centres, toFace, getSquareColor(faces, face, j));
+        if (!isGoodEdge(F_BACK, i, toFace, toCubieInd))
+            return false;
+        j = (j == i) ? (i + 6) % 8 : i + 2;
+
+        //between edges
+        toFace = getFace(centres, getSquareColor(faces, f, i));
+        toCubieInd = getEdgeCubieIndex(centres, toFace, getSquareColor(faces, face, (i + 6) % 8));
+        if (!isGoodEdge(f, i, toFace, toCubieInd))
+            return false;
+        f = face;
+
+        i += 2;
+    }
+
+    return true;
+}
 
 /// <summary>
 /// Function to get moves of Stage 1
@@ -508,8 +565,3 @@ vector<eMove> getStage4Moves(const FaceArray& faces, const eColor centres[6])
     array<eMove, 6> availableMoves{ L2, R2, F2, B2, U2, D2 };           //Available moves in Stage 4
     return IDDFS(availableMoves, faces, centres, isSolved);             //Applying IDDFS on this stage
 }
-
-
-
-
-
