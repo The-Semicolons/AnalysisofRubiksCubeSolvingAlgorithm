@@ -165,17 +165,39 @@ void printCube(const FaceArray& faces, eColor centers[])
 /// </summary>
 /// <param name="faces">Array of type FaceArray</param>
 /// <param name="centers">enum eColor for storing center faces</param>
-void readData(FaceArray& faces, eColor centers[])
+bool readData(FaceArray& faces, eColor centers[])
 {
     int i, j;
+    int check[6];
     cout << "Type Faces in the order UDFBLR:" << endl;
     for (int i = 0;i < 6;i++)                   //loop for all 6 faces of cube
     {
         char c[9];
         //Taking input of 9 face colors in the form W,Y,G,R,O,B where each represents White, Yellow, Green, Red, Orange, Blue color
         cin >> c[0] >> c[1] >> c[2] >> c[3] >> c[4] >> c[5] >> c[6] >> c[7] >> c[8];
-        faces[i] << 4;                      //Left shifting by 4 bytes to accomodate all faces in 32 bytes.
-        faces[i] |= getColor(c[0]);         //Applying Bitwise OR Operation to store color enum value in faces
+        for (int j = 0;j < 8;j++)
+        {
+            if (c[i] == 'R')                //Applying a check if input given is correct or not
+                check[0]++;
+            else if (c[i] == 'Y')
+                check[1]++;
+            else if (c[i] == 'W')
+                check[2]++;
+            else if (c[i] == 'G')
+                check[3]++;
+            else if (c[i] == 'O')
+                check[4]++;
+            else if(c[i]=='B')
+                check[5]++;
+            else
+            {
+                cout << "Error: Invalid Alphabet given as input, please re-enter the colours properly!";
+               
+                return 0;
+            }
+        }
+        faces[i] << 4;                          //Left shifting by 4 bytes to accomodate all faces in 32 bytes.
+        faces[i] |= getColor(c[0]);             //Applying Bitwise OR Operation to store color enum value in faces
         faces[i] << 4;
         faces[i] |= getColor(c[1]);
         faces[i] << 4;
@@ -192,8 +214,16 @@ void readData(FaceArray& faces, eColor centers[])
         faces[i] |= getColor(c[3]);
         faces[i] << 4;
 
-        centers[i] = getColor(c[4]);        //Storing enum value of center color in centers array
+        centers[i] = getColor(c[4]);            //Storing enum value of center color in centers array
     }
+    for (int i = 0;i < 6;i++)
+    {
+            if (check[i] != 9) {
+                cout << "Invalid Input, please re-check the colours";      //Returning error if input is found wrong
+                return 0;
+            }
+    }
+    return 1;
 }
 
 int main()
@@ -201,7 +231,9 @@ int main()
     FaceArray faces = { 0,0,0,0,0,0 };          //Initializing array for storing scrambled faces
     eColor centers[6];                          //Initializing array for storing Colours at middle cubie of the face
 
-    readData(faces, centers);                   //Function that will take input of faces from the user
+    bool input=readData(faces, centers);                   //Function that will take input of faces from the user
+    if (input == 0)
+        return 0;
 
     std::cout << "Initialising..";
     initialiseSolver(centers);
@@ -237,6 +269,6 @@ int main()
     cout << "Stage 4 Moves: " << stageString;       //Printing the moves
     doMoveList(faces, moves);                       //Applying the moves on rubik's cube
     moveString += stageString;
-
+    return 0;
 
 }
