@@ -25,8 +25,8 @@ set<uint_fast64_t> permutations;
 /// <param name="isStageGoal"> Returns boolean value if the stage is goal stage </param>
 /// <param name="lastMove"> Specifies the last move made </param>
 /// <returns>Bollean value True if goal state is found else False</returns>
-bool DFS(const int depth, std::vector<eMove> &moveList, const array<eMove,6> &availableMoves, const FaceArray& faces, const eColor centres[6],
-    bool (*isStageGoal)(const FaceArray& faces, const eColor centres[6]), const eMove& lastMove) 
+bool DFS(const int depth, std::vector<eMove>& moveList, const array<eMove, 6>& availableMoves, const FaceArray& faces, const eColor centres[6],
+    bool (*isStageGoal)(const FaceArray& faces, const eColor centres[6]), const eMove& lastMove)
 {
 
     if (depth == 0) {
@@ -34,7 +34,7 @@ bool DFS(const int depth, std::vector<eMove> &moveList, const array<eMove,6> &av
     }
 
     //Recursive loop for going back to the base state
-    for (auto &m : availableMoves) {
+    for (auto& m : availableMoves) {
         //if the move is a double move and is the current move
         if (lastMove % 2 && m == lastMove) {
             continue;
@@ -71,7 +71,7 @@ bool DFS(const int depth, std::vector<eMove> &moveList, const array<eMove,6> &av
 /// <param name="centres"> Array for storing centre colours of a face </param>
 /// <param name="isStageGoal"> Returns boolean value if the stage is goal stage </param>
 /// <returns>Vector of moves found by algorithm to solve the cube</returns>
-vector<eMove> IDDFS(const array<eMove,6> &availableMoves, const FaceArray& faces, const eColor centres[6], bool(*isStageGoal)(const FaceArray& faces, const eColor centres[6])) {
+vector<eMove> IDDFS(const array<eMove, 6>& availableMoves, const FaceArray& faces, const eColor centres[6], bool(*isStageGoal)(const FaceArray& faces, const eColor centres[6])) {
 
     vector<eMove> moveList;
     cout << endl << "IDDFS Depth: 1";
@@ -237,13 +237,13 @@ void initialiseSolver(const eColor centers[6])
     for (int i = 0;i < 6;i++)				//Loop for traversing all the 6 faces of cube
     {
         uint_fast32_t face = 0;
-        for (int j = 0;j < 8;j++)			//Nested loop for traversing 8 colors of face of cube
+        for (int j = 0;j < 8;++j)			//Nested loop for traversing 8 colors of face of cube
         {
             face = (face << 4) | centers[i];  //Storing color of center face in the 8 faces 
         }
         solvedState[i] = face;
     }
-    array<eMove,6> availableMoves = { L2, R2, F2, B2, U2, D2 };
+    array<eMove, 6> availableMoves = { L2, R2, F2, B2, U2, D2 };
     IDDFS(availableMoves, solvedState, centers, isInitialiseStageGoal);
 }
 
@@ -431,7 +431,7 @@ std::vector<eMove> getStage1Moves(const FaceArray& faces, const eColor centres[6
         return std::vector<eMove>();
     }
 
-    
+
     array<eMove, 6> availableMoves{ L, R, F, B, U, D };             //Available moves in Stage 1
     return IDDFS(availableMoves, faces, centres, isAllEdgesGood);   //Applying IDDFS on this stage
 
@@ -464,7 +464,7 @@ bool isStage2Goal(const FaceArray& faces, const eColor centres[6]) {
             return false;
         }
 
-         c1 = getSquareColor(faces, F_UP, i), c2 = getSquareColor(faces, F_DOWN, i);
+        c1 = getSquareColor(faces, F_UP, i), c2 = getSquareColor(faces, F_DOWN, i);
         if (!((c1 == color_up || c1 == color_down) && (c2 == color_up || c2 == color_down))) {
             return false;
         }
@@ -486,7 +486,7 @@ std::vector<eMove> getStage2Moves(const FaceArray& faces, const eColor centres[6
         return std::vector<eMove>();
     }
 
-  
+
     array<eMove, 6> availableMoves{ L, R, F, B, U2, D2 };           //Available moves in Stage 2
     return IDDFS(availableMoves, faces, centres, isStage2Goal);     //Applying IDDFS on this stage
 }
@@ -511,8 +511,10 @@ bool isStage3Goal(const FaceArray& faces, const eColor centres[6])
         eColor c1 = getSquareColor(faces, F_UP, i), c2 = getSquareColor(faces, F_DOWN, i);
         if (!((c1 == color_u || c1 == color_d) && (c2 == color_u || c2 == color_d)))
             return false;
+        c1 = getSquareColor(faces, F_FRONT, i); c2 = getSquareColor(faces, F_BACK, i);
         if (!((c1 == color_f || c1 == color_b) && (c2 == color_f || c2 == color_b)))
             return false;
+        c1 = getSquareColor(faces, F_LEFT, i); c2 = getSquareColor(faces, F_RIGHT, i);
         if (!((c1 == color_l || c1 == color_r) && (c2 == color_l || c2 == color_r)))
             return false;
     }

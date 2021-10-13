@@ -126,15 +126,14 @@ string getMoveListString(const vector<eMove>& moveList)
 /// </summary>
 /// <param name="faces">: FaceArray type input of faces</param>
 /// <param name="centers">: Array input of centers</param>
-void printCube(const FaceArray& faces, eColor centers[])
-{
-    cout << endl;
-    cout << "-------Printing Cube-------" << endl;
-    for (int i = 0;i < 6;i++)                        //Loop for all the 6 faces of cube
-    {
+void printCube(const FaceArray& faces, eColor centres[]) {
+    std::cout << std::endl;
+    std::cout << "-----Printing Cube-----" << std::endl;
+    for (int i = 0; i < 6; ++i) {                          //Iterating loop for 6 faces
         char c[9];
-        uint_fast32_t face = faces[i];
-        c[3] = getColorCharacter(face & 0xF);       //Extracting the color from faces and storing in a character array
+        uint_fast32_t face = faces[i];                     //Storing a face of cube in variable face
+
+        c[3] = getColorCharacter(face & 0xF);              //Extracting colors from face variable       
         face = face >> 4;
         c[6] = getColorCharacter(face & 0xF);
         face = face >> 4;
@@ -149,15 +148,14 @@ void printCube(const FaceArray& faces, eColor centers[])
         c[1] = getColorCharacter(face & 0xF);
         face = face >> 4;
         c[0] = getColorCharacter(face & 0xF);
-        c[4] = centers[i];
+        c[4] = getColorCharacter(centres[i]);
 
-        for (int j = 0;j < 9; ++j)               //Traversing the character array to print the colors
-        {
-            cout << c[j];
-        }
-        cout << endl;
+        for (int j = 0; j < 9; ++j)                        //Printing the Extracted colors
+            std::cout << c[j];
+
+        std::cout << std::endl;
     }
-    cout << "-----------------------" << endl;
+    std::cout << "-----------------------" << std::endl;
 }
 
 /// <summary>
@@ -174,23 +172,22 @@ void readData(FaceArray& faces, eColor centers[])
         char c[9];
         //Taking input of 9 face colors in the form W,Y,G,R,O,B where each represents White, Yellow, Green, Red, Orange, Blue color
         cin >> c[0] >> c[1] >> c[2] >> c[3] >> c[4] >> c[5] >> c[6] >> c[7] >> c[8];
-        faces[i] << 4;                      //Left shifting by 4 bytes to accomodate all faces in 32 bytes.
+        faces[i] <<= 4;                      //Left shifting by 4 bytes to accomodate all faces in 32 bytes.
         faces[i] |= getColor(c[0]);         //Applying Bitwise OR Operation to store color enum value in faces
-        faces[i] << 4;
+        faces[i] <<= 4;
         faces[i] |= getColor(c[1]);
-        faces[i] << 4;
+        faces[i] <<= 4;
         faces[i] |= getColor(c[2]);
-        faces[i] << 4;
+        faces[i] <<= 4;
         faces[i] |= getColor(c[5]);
-        faces[i] << 4;
+        faces[i] <<= 4;
         faces[i] |= getColor(c[8]);
-        faces[i] << 4;
+        faces[i] <<= 4;
         faces[i] |= getColor(c[7]);
-        faces[i] << 4;
+        faces[i] <<= 4;
         faces[i] |= getColor(c[6]);
-        faces[i] << 4;
+        faces[i] <<= 4;
         faces[i] |= getColor(c[3]);
-        faces[i] << 4;
 
         centers[i] = getColor(c[4]);        //Storing enum value of center color in centers array
     }
@@ -205,6 +202,8 @@ int main()
 
     std::cout << "Initialising..";
     initialiseSolver(centers);
+
+    printCube(faces, centers);
 
     string moveString;
 
@@ -238,5 +237,18 @@ int main()
     doMoveList(faces, moves);                       //Applying the moves on rubik's cube
     moveString += stageString;
 
+    std::cout << "\n\nSolution: " << moveString << std::endl;
+    moveString = optimiseMoves(moveString);
+    std::cout << "Optimised: " << moveString << std::endl;
+
+    int moveCount = 0;
+    for (auto& c : moveString) {
+        if (c == ' ')
+            ++moveCount;
+    }
+
+    std::cout << "Moves Needed: " << moveCount << std::endl << std::endl;
+
+    return 0;
 
 }
