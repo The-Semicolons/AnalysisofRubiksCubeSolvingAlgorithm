@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{0117a0e9-0419-490b-8ac7-67f618ae5a8f}</ProjectGuid>
-    <RootNamespace>ThistlethwaiteSoln</RootNamespace>
+    <ProjectGuid>{087de207-a252-430e-98a8-a7c2d6e7cb0d}</ProjectGuid>
+    <RootNamespace>Code</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -139,11 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="rubiks.cpp" />
-    <ClCompile Include="ThistlethwaiteSoln.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="rubiks.h" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
