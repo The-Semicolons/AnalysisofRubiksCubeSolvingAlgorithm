@@ -2,14 +2,15 @@
 // File Created by : Utkarsh Gupta [9.10.2021 12:02:38]
 // 
 
-// Importing Header Files
+#pragma once
+
+// Header Files
 #include <iostream>
 #include <windows.h>
 
 // Local Header Files
 #include "cube.h"
 
-#pragma once
 /// <summary>
 /// Class used for all functions related to printing data/messages on console.
 /// </summary>
@@ -55,19 +56,7 @@ public:
 		SetConsoleTextAttribute(hConsole, 15);
 		std::cout << "\n Richard E. Korf's Rubik's Cube Solving Algorithm\n\n"
 			<< "|================================================| \n\n";
-		SetConsoleTextAttribute(hConsole, 8);
-		std::cout<< "In 1997 Richard Korf[16] announced an algorithm with which he had optimally solved random instances of the cube. Of the ten random cubes he did, none"
-			<< "required more than 18 face turns.The method he used is called IDA * andis described in his paper \"Finding Optimal Solutions to Rubik's Cube Using Pattern"
-			<< "Databases\". Korf describes this method as follows:" << std::endl << std::endl
-			<< "IDA * is a depth - first search that looks for increasingly longer solutions in a series of iterations, using a lower - bound heuristic to prune branches"
-			<< "once a lower bound on their length exceeds the current iterations bound." << std::endl << std::endl
-			<< "It works roughly as follows.First he identified a number of subproblems that are small enough to be solved optimally.He used :" << std::endl
-			<< "1. The cube restricted to only the corners, not looking at the edges." << std::endl
-			<< "2. The cube restricted to only 6 edges, not looking at the corners nor at the other edges." << std::endl
-			<< "3. The cube restricted to the other 6 edges." << std::endl << std::endl
-			<< "Clearly the number of moves required to solve any of these subproblems is a lower bound for the number of moves needed to solve the entire cube."
-			<< std::endl << std::endl;
-		SetConsoleTextAttribute(hConsole, 15);
+		
 	}
 
 	/// <summary>
@@ -84,7 +73,7 @@ public:
 			std::cout << "        | ";
 
 			for (int j = 0; j < BREADTH; j++) {
-				std::cout << printColor(a.currentState[WHITE][i][j]) << " ";
+				std::cout << printColor(a.currentState[YELLOW][i][j]) << " ";
 				SetConsoleTextAttribute(hConsole, 15);
 			}
 			std::cout << "|" << std::endl;
@@ -100,7 +89,7 @@ public:
 			std::cout << "| ";
 
 			for (int j = 0; j < BREADTH; j++) {
-				std::cout << printColor(a.currentState[GREEN][i][j]) << " ";
+				std::cout << printColor(a.currentState[BLUE][i][j]) << " ";
 				SetConsoleTextAttribute(hConsole, 15);
 			}
 
@@ -114,7 +103,7 @@ public:
 			std::cout << "| ";
 
 			for (int j = 0; j < BREADTH; j++) {
-				std::cout << printColor(a.currentState[BLUE][i][j]) << " ";
+				std::cout << printColor(a.currentState[GREEN][i][j]) << " ";
 				SetConsoleTextAttribute(hConsole, 15);
 			}
 
@@ -138,7 +127,7 @@ public:
 			std::cout << "        | ";
 
 			for (int j = 0; j < BREADTH; j++) {
-				std::cout << printColor(a.currentState[YELLOW][i][j]) << " ";
+				std::cout << printColor(a.currentState[WHITE][i][j]) << " ";
 				SetConsoleTextAttribute(hConsole, 15);
 			}
 
@@ -158,13 +147,13 @@ public:
 		std::string input;
 		std::cout << "          Menu" << std::endl
 			<< "========================" << std::endl
-			<< "1.      Input Cube State" << std::endl
-			<< "2.         Scramble Cube" << std::endl
-			<< "3.            Solve Cube" << std::endl
-			<< "4.   Algorithm Analytics" << std::endl
-			<< "5.                 About" << std::endl
-			<< "6.                  Help" << std::endl
-			<< "7.                  Exit" << std::endl
+			<< "1.          Input Cube State" << std::endl
+			<< "2.             Scramble Cube" << std::endl
+			<< "3.                Solve Cube" << std::endl
+			<< "4.       Algorithm Analytics" << std::endl
+			<< "5.                     About" << std::endl
+			<< "6.                      Help" << std::endl
+			<< "7.                      Exit" << std::endl
 			<< "Choice: ";
 		SetConsoleTextAttribute(hConsole, 15);
 		std::cin >> input;
@@ -207,10 +196,22 @@ public:
 			return 4;
 		}
 		else if (input == "5" || input == "About") {
-			return 5;
+			SetConsoleTextAttribute(hConsole, 8);
+			std::cout << "In 1997 Richard Korf[16] announced an algorithm with which he had optimally solved random instances of the cube. Of the ten random cubes he did, none"
+				<< "required more than 18 face turns.The method he used is called IDA * andis described in his paper \"Finding Optimal Solutions to Rubik's Cube Using Pattern"
+				<< "Databases\". Korf describes this method as follows:" << std::endl << std::endl
+				<< "IDA * is a depth - first search that looks for increasingly longer solutions in a series of iterations, using a lower - bound heuristic to prune branches"
+				<< "once a lower bound on their length exceeds the current iterations bound." << std::endl << std::endl
+				<< "It works roughly as follows.First he identified a number of subproblems that are small enough to be solved optimally.He used :" << std::endl
+				<< "1. The cube restricted to only the corners, not looking at the edges." << std::endl
+				<< "2. The cube restricted to only 6 edges, not looking at the corners nor at the other edges." << std::endl
+				<< "3. The cube restricted to the other 6 edges." << std::endl << std::endl
+				<< "Clearly the number of moves required to solve any of these subproblems is a lower bound for the number of moves needed to solve the entire cube."
+				<< std::endl << std::endl;
+			SetConsoleTextAttribute(hConsole, 15);
 		}
 		else if (input == "6" || input == "Help") {
-			return 6;
+			return 7;
 		}
 		else if (input == "7" || input == "Exit") {
 			exit(0);
