@@ -2,6 +2,10 @@
 // File Created by : Utkarsh Gupta [28.09.2021 22:35:54]
 // 
 
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 // Importing Header Files
 #include <time.h>
 #include <stdio.h>
@@ -12,6 +16,7 @@
 #include "logger.h"
 #include "markovchain.h"
 #include "display.h"
+#include "idastar.h"
 
 /// <summary>
 /// Program execution starts and ends here.
@@ -22,10 +27,14 @@ int main(void) {
 
 	Cube rubiksCube = Cube();
 	MarkovChain scrambler = MarkovChain();
+	//IDAStar solver = IDAStar();
 
 	int noOfSteps;
+
+	
+
 	std::vector<std::string> steps;
-	std::string tempString;
+	std::string tempString, step;
 
 	Display::welcomeMessage();
 
@@ -53,6 +62,7 @@ int main(void) {
 			SetConsoleTextAttribute(hConsole, 8);
 			std::cout << "Performing scrambling on the cube." << std::endl;
 			rubiksCube.move(steps);
+			move(steps);
 			SetConsoleTextAttribute(hConsole, 15);
 			Display::printCube(rubiksCube);
 			SetConsoleTextAttribute(hConsole, 15);
@@ -68,25 +78,20 @@ int main(void) {
 				SetConsoleTextAttribute(hConsole, 4);
 				std::cout << i + 1 << " : ";
 				SetConsoleTextAttribute(hConsole, 15);
-				std::cin >> tempString;
-				steps.insert(steps.end(), tempString);
+				std::cin >> step;
 				SetConsoleTextAttribute(hConsole, 8);
-				std::cout << "Performing scrambling on the cube." << std::endl;
-				rubiksCube.move(steps);
+				std::cout << "Performing scrambliNg on the cube." << std::endl;
+				rubiksCube.move(step);
+				move(step);
 				SetConsoleTextAttribute(hConsole, 15);
 				Display::printCube(rubiksCube);
 			}
 			break;
-		case 23:
-
-			break;
 		case 3:
-
+			loadDatabase();
+			findSolution();
 			break;
 		case 4:
-
-			break;
-		case 5:
 
 			break;
 		case 6:
@@ -99,4 +104,3 @@ int main(void) {
 	
 	return 0;
 }
-

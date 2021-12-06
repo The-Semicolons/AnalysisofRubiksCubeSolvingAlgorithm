@@ -6,6 +6,7 @@
 
 #include<vector>
 #include<string>
+#include<iostream>
 
 // Red coloured face.
 #define RED 0
@@ -83,6 +84,309 @@ private:
 				for (int k = 0; k < BREADTH; k++) {
 					this->tempState[i][j][k] = this->currentState[i][j][k];
 				}
+			}
+		}
+	}
+
+	/// <summary>
+	/// Simulates the move R1 of the cube. Rotates the right face 90 degrees clockwise.
+	/// </summary>
+	void moveR1(void) {
+		this->copyCurrentStateToTempState();
+		for (int i = 0; i < 3; i++) {
+			this->currentState[YELLOW][i][2] = this->tempState[RED][i][2];
+			this->currentState[RED][i][2] = this->tempState[WHITE][i][2];
+			this->currentState[WHITE][i][2] = this->tempState[ORANGE][2 - i][0];
+			this->currentState[ORANGE][2 - i][0] = this->tempState[YELLOW][i][2];
+
+			for (int j = 0; j < 3; j++) {
+				this->currentState[GREEN][i][j] = this->tempState[GREEN][2 - j][i];
+			}
+		}
+	}
+
+	/// <summary>
+	/// Simulates the move R2 of the cube. Rotates the right face 180 degrees clockwise.
+	/// </summary>
+	void moveR2(void) {
+		this->copyCurrentStateToTempState();
+		for (int i = 0; i < 3; i++) {
+			this->currentState[YELLOW][i][2] = this->tempState[WHITE][i][2];
+			this->currentState[RED][i][2] = this->tempState[ORANGE][2 - i][0];
+			this->currentState[WHITE][i][2] = this->tempState[YELLOW][i][2];
+			this->currentState[ORANGE][2 - i][0] = this->tempState[RED][i][2];
+
+			for (int j = 0; j < 3; j++) {
+				this->currentState[GREEN][i][j] = this->tempState[GREEN][2 - i][2 - j];
+			}
+		}
+	}
+
+	/// <summary>
+	/// Simulates the move R' of the cube. Rotates the right face 90 degrees anti-clockwise.
+	/// </summary>
+	void moveR3(void) {
+		this->copyCurrentStateToTempState();
+		for (int i = 0; i < 3; i++) {
+			this->currentState[YELLOW][i][2] = this->tempState[ORANGE][2 - i][0];
+			this->currentState[RED][i][2] = this->tempState[YELLOW][i][2];
+			this->currentState[WHITE][i][2] = this->tempState[RED][i][2];
+			this->currentState[ORANGE][2 - i][0] = this->tempState[WHITE][i][2];
+
+			for (int j = 0; j < 3; j++) {
+				this->currentState[GREEN][i][j] = this->tempState[GREEN][j][2 - i];
+			}
+		}
+	}
+
+	/// <summary>
+	/// Simulates the move L1 of the cube. Rotates the left face 90 degrees clockwise.
+	/// </summary>
+	void moveL1(void) {
+		this->copyCurrentStateToTempState();
+		for (int i = 0; i < 3; i++) {
+			this->currentState[YELLOW][i][0] = this->tempState[RED][i][0];
+			this->currentState[RED][i][0] = this->tempState[WHITE][i][0];
+			this->currentState[WHITE][i][0] = this->tempState[ORANGE][2 - i][2];
+			this->currentState[ORANGE][2 - i][2] = this->tempState[YELLOW][i][0];
+
+			for (int j = 0; j < 3; j++) {
+				this->currentState[BLUE][i][j] = this->tempState[BLUE][j][2 - i];
+			}
+		}
+	}
+
+	/// <summary>
+	/// Simulates the move L2 of the cube. Rotates the left face 180 degrees clockwise.
+	/// </summary>
+	void moveL2(void) {
+		this->copyCurrentStateToTempState();
+		for (int i = 0; i < 3; i++) {
+			this->currentState[YELLOW][i][0] = this->tempState[WHITE][i][0];
+			this->currentState[RED][i][0] = this->tempState[ORANGE][2 - i][2];
+			this->currentState[WHITE][i][0] = this->tempState[YELLOW][i][0];
+			this->currentState[ORANGE][2 - i][2] = this->tempState[RED][i][0];
+
+			for (int j = 0; j < 3; j++) {
+				this->currentState[BLUE][i][j] = this->tempState[BLUE][2 - i][2 - j];
+			}
+		}
+	}
+
+	/// <summary>
+	/// Simulates the move L' of the cube. Rotates the left face 90 degrees anti-clockwise.
+	/// </summary>
+	void moveL3(void) {
+		this->copyCurrentStateToTempState();
+		for (int i = 0; i < 3; i++) {
+			this->currentState[YELLOW][i][0] = this->tempState[ORANGE][2 - i][2];
+			this->currentState[RED][i][0] = this->tempState[YELLOW][i][0];
+			this->currentState[WHITE][i][0] = this->tempState[RED][i][0];
+			this->currentState[ORANGE][2 - i][2] = this->tempState[WHITE][i][0];
+
+			for (int j = 0; j < 3; j++) {
+				this->currentState[BLUE][i][j] = this->tempState[BLUE][2 - j][i];
+			}
+		}
+	}
+
+	/// <summary>
+	/// Simulates the move F1 of the cube. Rotates the front face 90 degrees clockwise.
+	/// </summary>
+	void moveF1(void) {
+		this->copyCurrentStateToTempState();
+		for (int i = 0; i < 3; i++) {
+			this->currentState[YELLOW][2][i] = this->tempState[BLUE][2 - i][2];
+			this->currentState[GREEN][i][0] = this->tempState[YELLOW][2][i];
+			this->currentState[WHITE][0][2 - i] = this->tempState[GREEN][i][0];
+			this->currentState[BLUE][2 - i][2] = this->tempState[WHITE][0][2 - i];
+
+			for (int j = 0; j < 3; j++) {
+				this->currentState[RED][i][j] = this->tempState[RED][2 - j][i];
+			}
+		}
+	}
+
+	/// <summary>
+	/// Simulates the move F2 of the cube. Rotates the front face 180 degrees clockwise.
+	/// </summary>
+	void moveF2(void) {
+		this->copyCurrentStateToTempState();
+		for (int i = 0; i < 3; i++) {
+			this->currentState[YELLOW][2][i] = this->tempState[WHITE][0][2 - i];
+			this->currentState[GREEN][i][0] = this->tempState[BLUE][2 - i][2];
+			this->currentState[WHITE][0][2 - i] = this->tempState[YELLOW][2][i];
+			this->currentState[BLUE][2 - i][2] = this->tempState[GREEN][i][0];
+
+			for (int j = 0; j < 3; j++) {
+				this->currentState[RED][i][j] = this->tempState[RED][2 - i][2 - j];
+			}
+		}
+	}
+
+	/// <summary>
+	/// Simulates the move F' of the cube. Rotates the front face 90 degrees anti-clockwise.
+	/// </summary>
+	void moveF3(void) {
+		this->copyCurrentStateToTempState();
+		for (int i = 0; i < 3; i++) {
+			this->currentState[YELLOW][2][i] = this->tempState[GREEN][i][0];
+			this->currentState[GREEN][i][0] = this->tempState[WHITE][0][2 - i];
+			this->currentState[WHITE][0][2 - i] = this->tempState[BLUE][2 - i][2];
+			this->currentState[BLUE][2 - i][2] = this->tempState[YELLOW][2][i];
+
+			for (int j = 0; j < 3; j++) {
+				this->currentState[RED][i][j] = this->tempState[RED][j][2 - i];
+			}
+		}
+	}
+	/// <summary>
+	/// Simulates the move U1 of the cube. Rotates the upper face 90 degrees clockwise.
+	/// </summary>
+	void moveU1(void) {
+		this->copyCurrentStateToTempState();
+		for (int i = 0; i < 3; i++) {
+			this->currentState[RED][0][i] = this->tempState[GREEN][0][i];
+			this->currentState[BLUE][0][i] = this->tempState[RED][0][i];
+			this->currentState[ORANGE][0][i] = this->tempState[BLUE][0][i];
+			this->currentState[GREEN][0][i] = this->tempState[ORANGE][0][i];
+
+			for (int j = 0; j < 3; j++) {
+				this->currentState[YELLOW][i][j] = this->tempState[YELLOW][2 - j][i];
+			}
+		}
+	}
+
+	/// <summary>
+	/// Simulates the move U2 of the cube. Rotates the upper face 180 degrees clockwise.
+	/// </summary>
+	void moveU2(void) {
+		this->copyCurrentStateToTempState();
+		for (int i = 0; i < 3; i++) {
+			this->currentState[RED][0][i] = this->tempState[ORANGE][0][i];
+			this->currentState[BLUE][0][i] = this->tempState[GREEN][0][i];
+			this->currentState[ORANGE][0][i] = this->tempState[RED][0][i];
+			this->currentState[GREEN][0][i] = this->tempState[BLUE][0][i];
+
+			for (int j = 0; j < 3; j++) {
+				this->currentState[YELLOW][i][j] = this->tempState[YELLOW][2 - i][2 - j];
+			}
+		}
+	}
+
+	/// <summary>
+	/// Simulates the move U' of the cube. Rotates the upper face 90 degrees anti-clockwise.
+	/// </summary>
+	void moveU3(void) {
+		this->copyCurrentStateToTempState();
+		for (int i = 0; i < 3; i++) {
+			this->currentState[RED][0][i] = this->tempState[BLUE][0][i];
+			this->currentState[BLUE][0][i] = this->tempState[ORANGE][0][i];
+			this->currentState[ORANGE][0][i] = this->tempState[GREEN][0][i];
+			this->currentState[GREEN][0][i] = this->tempState[RED][0][i];
+
+			for (int j = 0; j < 3; j++) {
+				this->currentState[YELLOW][i][j] = this->tempState[YELLOW][j][2 - i];
+			}
+		}
+	}
+	/// <summary>
+	/// Simulates the move B1 of the cube. Rotates the back face 90 degrees clockwise.
+	/// </summary>
+	void moveB1(void) {
+		this->copyCurrentStateToTempState();
+		for (int i = 0; i < 3; i++) {
+			this->currentState[YELLOW][0][i] = this->tempState[BLUE][2 - i][0];
+			this->currentState[GREEN][i][2] = this->tempState[YELLOW][0][i];
+			this->currentState[WHITE][2][2 - i] = this->tempState[GREEN][i][2];
+			this->currentState[BLUE][2 - i][0] = this->tempState[WHITE][2][2 - i];
+
+			for (int j = 0; j < 3; j++) {
+				this->currentState[ORANGE][i][j] = this->tempState[ORANGE][j][2 - i];
+			}
+		}
+	}
+
+	/// <summary>
+	/// Simulates the move B2 of the cube. Rotates the back face 180 degrees clockwise.
+	/// </summary>
+	void moveB2(void) {
+		this->copyCurrentStateToTempState();
+		for (int i = 0; i < 3; i++) {
+			this->currentState[YELLOW][0][i] = this->tempState[WHITE][2][2 - i];
+			this->currentState[GREEN][i][2] = this->tempState[BLUE][2 - i][0];
+			this->currentState[WHITE][2][2 - i] = this->tempState[YELLOW][0][i];
+			this->currentState[BLUE][2 - i][0] = this->tempState[GREEN][i][2];
+
+			for (int j = 0; j < 3; j++) {
+				this->currentState[ORANGE][i][j] = this->tempState[ORANGE][2 - i][2 - j];
+			}
+		}
+	}
+
+	/// <summary>
+	/// Simulates the move B' of the cube. Rotates the back face 90 degrees anti-clockwise.
+	/// </summary>
+	void moveB3(void) {
+		this->copyCurrentStateToTempState();
+		for (int i = 0; i < 3; i++) {
+			this->currentState[YELLOW][0][i] = this->tempState[GREEN][i][2];
+			this->currentState[GREEN][i][2] = this->tempState[WHITE][2][2 - i];
+			this->currentState[WHITE][2][2 - i] = this->tempState[BLUE][2 - i][0];
+			this->currentState[BLUE][2 - i][0] = this->tempState[YELLOW][0][i];
+
+			for (int j = 0; j < 3; j++) {
+				this->currentState[ORANGE][i][j] = this->tempState[ORANGE][2 - j][i];
+			}
+		}
+	}
+	/// <summary>
+	/// Simulates the move D1 of the cube. Rotates the down face 90 degrees clockwise.
+	/// </summary>
+	void moveD1(void) {
+		this->copyCurrentStateToTempState();
+		for (int i = 0; i < 3; i++) {
+			this->currentState[RED][2][i] = this->tempState[GREEN][2][i];
+			this->currentState[BLUE][2][i] = this->tempState[RED][2][i];
+			this->currentState[ORANGE][2][i] = this->tempState[BLUE][2][i];
+			this->currentState[GREEN][2][i] = this->tempState[ORANGE][2][i];
+
+			for (int j = 0; j < 3; j++) {
+				this->currentState[WHITE][i][j] = this->tempState[WHITE][j][2 - i];
+			}
+		}
+	}
+
+	/// <summary>
+	/// Simulates the move D2 of the cube. Rotates the down face 180 degrees clockwise.
+	/// </summary>
+	void moveD2(void) {
+		this->copyCurrentStateToTempState();
+		for (int i = 0; i < 3; i++) {
+			this->currentState[RED][2][i] = this->tempState[ORANGE][2][i];
+			this->currentState[BLUE][2][i] = this->tempState[GREEN][2][i];
+			this->currentState[ORANGE][2][i] = this->tempState[RED][2][i];
+			this->currentState[GREEN][2][i] = this->tempState[BLUE][2][i];
+
+			for (int j = 0; j < 3; j++) {
+				this->currentState[WHITE][i][j] = this->tempState[WHITE][2 - i][2 - j];
+			}
+		}
+	}
+
+	/// <summary>
+	/// Simulates the move D' of the cube. Rotates the down face 90 degrees anti-clockwise.
+	/// </summary>
+	void moveD3(void) {
+		this->copyCurrentStateToTempState();
+		for (int i = 0; i < 3; i++) {
+			this->currentState[RED][2][i] = this->tempState[BLUE][2][i];
+			this->currentState[BLUE][2][i] = this->tempState[ORANGE][2][i];
+			this->currentState[ORANGE][2][i] = this->tempState[GREEN][2][i];
+			this->currentState[GREEN][2][i] = this->tempState[RED][2][i];
+
+			for (int j = 0; j < 3; j++) {
+				this->currentState[WHITE][i][j] = this->tempState[WHITE][2 - j][i];
 			}
 		}
 	}
@@ -166,292 +470,7 @@ public:
 		}
 		return true;
 	}
-
-	/// <summary>
-	/// Simulates the move R1 of the cube. Rotates the right face 90 degrees clockwise.
-	/// </summary>
-	void moveR1(void) {
-		this->copyCurrentStateToTempState();
-		for (int i = 0; i < 3; i++) {
-			this->currentState[YELLOW][i][2] = this->tempState[RED][i][2];
-			this->currentState[ORANGE][i][2] = this->tempState[YELLOW][i][2];
-			this->currentState[WHITE][i][2] = this->tempState[ORANGE][i][2];
-			this->currentState[RED][i][2] = this->tempState[WHITE][i][2];
-			for (int j = 0; j < 3; j++) {
-				this->currentState[GREEN][i][j] = this->tempState[GREEN][2 - j][i];
-			}
-		}
-	}
-
-	/// <summary>
-	/// Simulates the move R2 of the cube. Rotates the right face 180 degrees clockwise.
-	/// </summary>
-	void moveR2(void) {
-		this->copyCurrentStateToTempState();
-		for (int i = 0; i < 3; i++) {
-			this->currentState[YELLOW][i][2] = this->tempState[WHITE][i][2];
-			this->currentState[ORANGE][i][2] = this->tempState[RED][i][2];
-			this->currentState[WHITE][i][2] = this->tempState[YELLOW][i][2];
-			this->currentState[RED][i][2] = this->tempState[ORANGE][i][2];
-			for (int j = 0; j < 3; j++) {
-				this->currentState[GREEN][i][j] = this->tempState[GREEN][2 - i][2 - j];
-			}
-		}
-	}
-
-	/// <summary>
-	/// Simulates the move R' of the cube. Rotates the right face 90 degrees anti-clockwise.
-	/// </summary>
-	void moveR3(void) {
-		this->copyCurrentStateToTempState();
-		for (int i = 0; i < 3; i++) {
-			this->currentState[YELLOW][i][2] = this->tempState[ORANGE][i][2];
-			this->currentState[ORANGE][i][2] = this->tempState[WHITE][i][2];
-			this->currentState[WHITE][i][2] = this->tempState[RED][i][2];
-			this->currentState[RED][i][2] = this->tempState[YELLOW][i][2];
-			for (int j = 0; j < 3; j++) {
-				this->currentState[GREEN][i][j] = this->tempState[GREEN][j][2 - i];
-			}
-		}
-	}
-
-	/// <summary>
-	/// Simulates the move L1 of the cube. Rotates the left face 90 degrees clockwise.
-	/// </summary>
-	void moveL1(void) {
-		this->copyCurrentStateToTempState();
-		for (int i = 0; i < 3; i++) {
-			this->currentState[YELLOW][i][0] = this->tempState[RED][i][0];
-			this->currentState[ORANGE][i][0] = this->tempState[YELLOW][i][0];
-			this->currentState[WHITE][i][0] = this->tempState[ORANGE][i][0];
-			this->currentState[RED][i][0] = this->tempState[WHITE][i][0];
-			for (int j = 0; j < 3; j++) {
-				this->currentState[BLUE][i][j] = this->tempState[BLUE][2 - j][i];
-			}
-		}
-	}
-
-	/// <summary>
-	/// Simulates the move L2 of the cube. Rotates the left face 180 degrees clockwise.
-	/// </summary>
-	void moveL2(void) {
-		this->copyCurrentStateToTempState();
-		for (int i = 0; i < 3; i++) {
-			this->currentState[YELLOW][i][0] = this->tempState[WHITE][i][0];
-			this->currentState[ORANGE][i][0] = this->tempState[RED][i][0];
-			this->currentState[WHITE][i][0] = this->tempState[YELLOW][i][0];
-			this->currentState[RED][i][0] = this->tempState[ORANGE][i][0];
-			for (int j = 0; j < 3; j++) {
-				this->currentState[BLUE][i][j] = this->tempState[BLUE][2 - i][2 - j];
-			}
-		}
-	}
-
-	/// <summary>
-	/// Simulates the move L' of the cube. Rotates the left face 90 degrees anti-clockwise.
-	/// </summary>
-	void moveL3(void) {
-		this->copyCurrentStateToTempState();
-		for (int i = 0; i < 3; i++) {
-			this->currentState[YELLOW][i][0] = this->tempState[ORANGE][i][0];
-			this->currentState[ORANGE][i][0] = this->tempState[WHITE][i][0];
-			this->currentState[WHITE][i][0] = this->tempState[RED][i][0];
-			this->currentState[RED][i][0] = this->tempState[YELLOW][i][0];
-			for (int j = 0; j < 3; j++) {
-				this->currentState[BLUE][i][j] = this->tempState[BLUE][j][2 - i];
-			}
-		}
-	}
-
-	/// <summary>
-	/// Simulates the move F1 of the cube. Rotates the front face 90 degrees clockwise.
-	/// </summary>
-	void moveF1(void) {
-		this->copyCurrentStateToTempState();
-		for (int i = 0; i < 3; i++) {
-			this->currentState[YELLOW][i][2] = this->tempState[RED][i][2];
-			this->currentState[ORANGE][i][2] = this->tempState[YELLOW][i][2];
-			this->currentState[WHITE][i][2] = this->tempState[ORANGE][i][2];
-			this->currentState[RED][i][2] = this->tempState[WHITE][i][2];
-			for (int j = 0; j < 3; j++) {
-				this->currentState[RED][i][j] = this->tempState[RED][2 - j][i];
-			}
-		}
-	}
-
-	/// <summary>
-	/// Simulates the move F2 of the cube. Rotates the front face 180 degrees clockwise.
-	/// </summary>
-	void moveF2(void) {
-		this->copyCurrentStateToTempState();
-		for (int i = 0; i < 3; i++) {
-			this->currentState[YELLOW][i][2] = this->tempState[WHITE][i][2];
-			this->currentState[ORANGE][i][2] = this->tempState[RED][i][2];
-			this->currentState[WHITE][i][2] = this->tempState[YELLOW][i][2];
-			this->currentState[RED][i][2] = this->tempState[ORANGE][i][2];
-			for (int j = 0; j < 3; j++) {
-				this->currentState[GREEN][i][j] = this->tempState[GREEN][2 - i][2 - j];
-			}
-		}
-	}
-
-	/// <summary>
-	/// Simulates the move F' of the cube. Rotates the front face 90 degrees anti-clockwise.
-	/// </summary>
-	void moveF3(void) {
-		this->copyCurrentStateToTempState();
-		for (int i = 0; i < 3; i++) {
-			this->currentState[YELLOW][i][2] = this->tempState[ORANGE][i][2];
-			this->currentState[ORANGE][i][2] = this->tempState[WHITE][i][2];
-			this->currentState[WHITE][i][2] = this->tempState[RED][i][2];
-			this->currentState[RED][i][2] = this->tempState[YELLOW][i][2];
-			for (int j = 0; j < 3; j++) {
-				this->currentState[GREEN][i][j] = this->tempState[GREEN][j][2 - i];
-			}
-		}
-	}
-	/// <summary>
-	/// Simulates the move U1 of the cube. Rotates the upper face 90 degrees clockwise.
-	/// </summary>
-	void moveU1(void) {
-		this->copyCurrentStateToTempState();
-		for (int i = 0; i < 3; i++) {
-			this->currentState[YELLOW][i][2] = this->tempState[RED][i][2];
-			this->currentState[ORANGE][i][2] = this->tempState[YELLOW][i][2];
-			this->currentState[WHITE][i][2] = this->tempState[ORANGE][i][2];
-			this->currentState[RED][i][2] = this->tempState[WHITE][i][2];
-			for (int j = 0; j < 3; j++) {
-				this->currentState[GREEN][i][j] = this->tempState[GREEN][2 - j][i];
-			}
-		}
-	}
-
-	/// <summary>
-	/// Simulates the move U2 of the cube. Rotates the upper face 180 degrees clockwise.
-	/// </summary>
-	void moveU2(void) {
-		this->copyCurrentStateToTempState();
-		for (int i = 0; i < 3; i++) {
-			this->currentState[YELLOW][i][2] = this->tempState[WHITE][i][2];
-			this->currentState[ORANGE][i][2] = this->tempState[RED][i][2];
-			this->currentState[WHITE][i][2] = this->tempState[YELLOW][i][2];
-			this->currentState[RED][i][2] = this->tempState[ORANGE][i][2];
-			for (int j = 0; j < 3; j++) {
-				this->currentState[GREEN][i][j] = this->tempState[GREEN][2 - i][2 - j];
-			}
-		}
-	}
-
-	/// <summary>
-	/// Simulates the move U' of the cube. Rotates the upper face 90 degrees anti-clockwise.
-	/// </summary>
-	void moveU3(void) {
-		this->copyCurrentStateToTempState();
-		for (int i = 0; i < 3; i++) {
-			this->currentState[YELLOW][i][2] = this->tempState[ORANGE][i][2];
-			this->currentState[ORANGE][i][2] = this->tempState[WHITE][i][2];
-			this->currentState[WHITE][i][2] = this->tempState[RED][i][2];
-			this->currentState[RED][i][2] = this->tempState[YELLOW][i][2];
-			for (int j = 0; j < 3; j++) {
-				this->currentState[GREEN][i][j] = this->tempState[GREEN][j][2 - i];
-			}
-		}
-	}
-	/// <summary>
-	/// Simulates the move B1 of the cube. Rotates the back face 90 degrees clockwise.
-	/// </summary>
-	void moveB1(void) {
-		this->copyCurrentStateToTempState();
-		for (int i = 0; i < 3; i++) {
-			this->currentState[YELLOW][i][2] = this->tempState[RED][i][2];
-			this->currentState[ORANGE][i][2] = this->tempState[YELLOW][i][2];
-			this->currentState[WHITE][i][2] = this->tempState[ORANGE][i][2];
-			this->currentState[RED][i][2] = this->tempState[WHITE][i][2];
-			for (int j = 0; j < 3; j++) {
-				this->currentState[GREEN][i][j] = this->tempState[GREEN][2 - j][i];
-			}
-		}
-	}
-
-	/// <summary>
-	/// Simulates the move B2 of the cube. Rotates the back face 180 degrees clockwise.
-	/// </summary>
-	void moveB2(void) {
-		this->copyCurrentStateToTempState();
-		for (int i = 0; i < 3; i++) {
-			this->currentState[YELLOW][i][2] = this->tempState[WHITE][i][2];
-			this->currentState[ORANGE][i][2] = this->tempState[RED][i][2];
-			this->currentState[WHITE][i][2] = this->tempState[YELLOW][i][2];
-			this->currentState[RED][i][2] = this->tempState[ORANGE][i][2];
-			for (int j = 0; j < 3; j++) {
-				this->currentState[GREEN][i][j] = this->tempState[GREEN][2 - i][2 - j];
-			}
-		}
-	}
-
-	/// <summary>
-	/// Simulates the move B' of the cube. Rotates the back face 90 degrees anti-clockwise.
-	/// </summary>
-	void moveB3(void) {
-		this->copyCurrentStateToTempState();
-		for (int i = 0; i < 3; i++) {
-			this->currentState[YELLOW][i][2] = this->tempState[ORANGE][i][2];
-			this->currentState[ORANGE][i][2] = this->tempState[WHITE][i][2];
-			this->currentState[WHITE][i][2] = this->tempState[RED][i][2];
-			this->currentState[RED][i][2] = this->tempState[YELLOW][i][2];
-			for (int j = 0; j < 3; j++) {
-				this->currentState[GREEN][i][j] = this->tempState[GREEN][j][2 - i];
-			}
-		}
-	}
-	/// <summary>
-	/// Simulates the move D1 of the cube. Rotates the down face 90 degrees clockwise.
-	/// </summary>
-	void moveD1(void) {
-		this->copyCurrentStateToTempState();
-		for (int i = 0; i < 3; i++) {
-			this->currentState[YELLOW][i][2] = this->tempState[RED][i][2];
-			this->currentState[ORANGE][i][2] = this->tempState[YELLOW][i][2];
-			this->currentState[WHITE][i][2] = this->tempState[ORANGE][i][2];
-			this->currentState[RED][i][2] = this->tempState[WHITE][i][2];
-			for (int j = 0; j < 3; j++) {
-				this->currentState[GREEN][i][j] = this->tempState[GREEN][2 - j][i];
-			}
-		}
-	}
-
-	/// <summary>
-	/// Simulates the move D2 of the cube. Rotates the down face 180 degrees clockwise.
-	/// </summary>
-	void moveD2(void) {
-		this->copyCurrentStateToTempState();
-		for (int i = 0; i < 3; i++) {
-			this->currentState[YELLOW][i][2] = this->tempState[WHITE][i][2];
-			this->currentState[ORANGE][i][2] = this->tempState[RED][i][2];
-			this->currentState[WHITE][i][2] = this->tempState[YELLOW][i][2];
-			this->currentState[RED][i][2] = this->tempState[ORANGE][i][2];
-			for (int j = 0; j < 3; j++) {
-				this->currentState[GREEN][i][j] = this->tempState[GREEN][2 - i][2 - j];
-			}
-		}
-	}
-
-	/// <summary>
-	/// Simulates the move D' of the cube. Rotates the down face 90 degrees anti-clockwise.
-	/// </summary>
-	void moveD3(void) {
-		this->copyCurrentStateToTempState();
-		for (int i = 0; i < 3; i++) {
-			this->currentState[YELLOW][i][2] = this->tempState[ORANGE][i][2];
-			this->currentState[ORANGE][i][2] = this->tempState[WHITE][i][2];
-			this->currentState[WHITE][i][2] = this->tempState[RED][i][2];
-			this->currentState[RED][i][2] = this->tempState[YELLOW][i][2];
-			for (int j = 0; j < 3; j++) {
-				this->currentState[GREEN][i][j] = this->tempState[GREEN][j][2 - i];
-			}
-		}
-	}
-
+	
 	/// <summary>
 	/// This function performes a set of moves on the cube.
 	/// </summary>
@@ -520,6 +539,9 @@ public:
 		}
 		else if (move == "D3") {
 			this->moveD3();
+		}
+		else {
+			std::cout << "ERROR" << std::endl;
 		}
 	}
 };

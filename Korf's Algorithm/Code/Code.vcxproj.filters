@@ -35,15 +35,6 @@
     <ClInclude Include="idastar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="graphicaluserinterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="database.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="heuristic.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="patterndatabase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
